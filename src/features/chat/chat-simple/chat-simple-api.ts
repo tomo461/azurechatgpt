@@ -28,6 +28,10 @@ export const ChatSimple = async (props: PromptGPTProps) => {
       chatThread.conversationStyle
     ),
     streaming: true,
+    azureOpenAIApiDeploymentName:
+      chatThread.model == "gpt-3.5"
+        ? process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME_GPT3
+        : process.env.AZURE_OPENAI_API_DEPLOYMENT_NAME_GPT4,
   });
 
   const memory = new BufferWindowMemory({
@@ -54,6 +58,7 @@ export const ChatSimple = async (props: PromptGPTProps) => {
     llm: chat,
     memory,
     prompt: chatPrompt,
+    verbose: true,
   });
 
   chain.call({ input: lastHumanMessage.content }, [handlers]);
